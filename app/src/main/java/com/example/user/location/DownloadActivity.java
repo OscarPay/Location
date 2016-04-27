@@ -13,9 +13,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DownloadActivity extends AppCompatActivity {
@@ -23,11 +26,17 @@ public class DownloadActivity extends AppCompatActivity {
     public static final String MIME_TEXT_PLAIN = "text/plain";
     public static final String TAG = "NfcDemo";
     private NfcAdapter adapter;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download);
+
+        listView = (ListView) findViewById(R.id.list_view);
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
+        listView.setAdapter(arrayAdapter);
 
         adapter = NfcAdapter.getDefaultAdapter(this);
 
@@ -40,7 +49,12 @@ public class DownloadActivity extends AppCompatActivity {
             Toast.makeText(this,"No soportas NFC NOOOOB", Toast.LENGTH_LONG).show();
         }
 
-        handleIntent(getIntent());
+        //handleIntent(getIntent());
+
+        FetchDataTask fetchDataTask = new FetchDataTask(arrayAdapter);
+        fetchDataTask.execute("Hola");
+
+
     }
 
     @Override

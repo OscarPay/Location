@@ -9,9 +9,13 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.user.location.Utils.NotificationUtils;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean hasBeenNotify = false;
     private Location centro = new Location("");
     private TextView tv;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         tv = (TextView) findViewById(R.id.tv_location);
+
 
         // Acquire a reference to the system Location Manager
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -42,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if(!hasBeenNotify){
                         NotificationUtils.showNotification("Hi everyone", "Estas en FMAT, ", BeaconActivity.class, getApplicationContext());
+
                         hasBeenNotify = true;
                     }
 
