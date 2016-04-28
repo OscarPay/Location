@@ -1,9 +1,15 @@
 package com.example.user.location;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -11,15 +17,23 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.estimote.sdk.Beacon;
+import com.estimote.sdk.BeaconManager;
+import com.estimote.sdk.Region;
+import com.example.user.location.Utils.NotificationUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 public class DownloadActivity extends AppCompatActivity {
 
@@ -27,32 +41,120 @@ public class DownloadActivity extends AppCompatActivity {
     public static final String TAG = "NfcDemo";
     private NfcAdapter adapter;
     private ListView listView;
+    public static final double DISTANCE = 50.0;
+    private boolean hasBeenNotify = false;
+    private Location centro = new Location("");
+    ArrayAdapter<String> arrayAdapter;
+    private BeaconManager beaconManager;
+    private boolean imInCC1 = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download);
 
+        centro.setLatitude(21.048234);
+        centro.setLongitude(-89.644263);
+
         listView = (ListView) findViewById(R.id.list_view);
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
+        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
         listView.setAdapter(arrayAdapter);
 
         adapter = NfcAdapter.getDefaultAdapter(this);
 
-        if(adapter == null){
-            Toast.makeText(this,"No soportas NFC NOOOOB", Toast.LENGTH_LONG).show();
+        if (adapter == null) {
+            Toast.makeText(this, "No soportas NFC NOOOOB", Toast.LENGTH_LONG).show();
             finish();
         }
 
-        if(!adapter.isEnabled()){
-            Toast.makeText(this,"No soportas NFC NOOOOB", Toast.LENGTH_LONG).show();
+        if (!adapter.isEnabled()) {
+            Toast.makeText(this, "No soportas NFC NOOOOB", Toast.LENGTH_LONG).show();
         }
+
+        // Acquire a reference to the system Location Manager
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        // Define a listener that responds to location updates
+        LocationListener locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                // Called when a new location is found by the network location provider.
+                double distance = centro.distanceTo(location);
+
+                if (distance <= DISTANCE) {
+
+                    if (!hasBeenNotify) {
+                        NotificationUtils.showNotification("Hi everyone", "Estas en FMAT, ", BeaconActivity.class, getApplicationContext());
+
+                        if (imInCC1) {
+                            FetchDataTask fetchDataTask = new FetchDataTask(arrayAdapter);
+                            fetchDataTask.execute("Hola");
+                        }
+
+                        hasBeenNotify = true;
+                    }
+
+                } else {
+                    hasBeenNotify = false;
+                }
+
+
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            public void onProviderEnabled(String provider) {
+            }
+
+            public void onProviderDisabled(String provider) {
+            }
+        };
+
+        // Register the listener with the Location Manager to receive location updates
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
         //handleIntent(getIntent());
 
-        FetchDataTask fetchDataTask = new FetchDataTask(arrayAdapter);
-        fetchDataTask.execute("Hola");
+
+        beaconManager = new BeaconManager(getApplicationContext());
+
+        beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
+            @Override
+            public void onEnteredRegion(Region region, List<Beacon> list) {
+                NotificationUtils.showNotification(
+                        "BIENVENIDO AL CC1",
+                        "Listo para descargar la información de la aisgnatura?", DownloadActivity.class, getApplicationContext());
+                imInCC1 = true;
+            }
+
+            @Override
+            public void onExitedRegion(Region region) {
+                NotificationUtils.showNotification("SALIDA", "Nos vemos pronto", MainActivity.class, getApplicationContext());
+                imInCC1 = false;
+            }
+        });
+
+        beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+            @Override
+            public void onServiceReady() {
+                beaconManager.startMonitoring(new Region(
+                        "monitored region",
+                        UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"),
+                        63463, 21120));
+            }
+        });
 
 
     }
@@ -150,7 +252,6 @@ public class DownloadActivity extends AppCompatActivity {
      * Background task for reading the data. Do not block the UI thread while reading.
      *
      * @author Ralf Wondratschek
-     *
      */
     private class NdefReaderTask extends AsyncTask<Tag, Void, String> {
 
