@@ -2,6 +2,7 @@ package com.example.user.location;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -9,13 +10,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.user.location.Utils.NotificationUtils;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,10 +47,14 @@ public class MainActivity extends AppCompatActivity {
                         NotificationUtils.showNotification("Hi everyone", "Estas en FMAT, ", BeaconActivity.class, getApplicationContext());
 
                         hasBeenNotify = true;
+                        SharedPreferences preferences = getSharedPreferences("app", MODE_PRIVATE);
+                        preferences.edit().putBoolean("Location", true).apply();
                     }
 
                 }else{
                     hasBeenNotify = false;
+                    SharedPreferences preferences = getSharedPreferences("app", MODE_PRIVATE);
+                    preferences.edit().putBoolean("Location", false).apply();
                 }
 
                 tv.setText("Latitud : " + location.getLatitude() + " Longitud: " + location.getLongitude() + " Distancia: "+ Double.toString(distance));

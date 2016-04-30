@@ -1,11 +1,11 @@
 [
     {
-        "merged": "C:\\Users\\USER\\Desktop\\FMAT 8\\Computo Movil\\nuevo\\Location\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi-v4\\abc_scrubber_control_to_pressed_mtrl_000.png",
-        "source": "C:\\Users\\USER\\Desktop\\FMAT 8\\Computo Movil\\nuevo\\Location\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\drawable-xxxhdpi\\abc_scrubber_control_to_pressed_mtrl_000.png"
-    },
-    {
         "merged": "C:\\Users\\USER\\Desktop\\FMAT 8\\Computo Movil\\nuevo\\Location\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi-v4\\abc_ic_menu_copy_mtrl_am_alpha.png",
         "source": "C:\\Users\\USER\\Desktop\\FMAT 8\\Computo Movil\\nuevo\\Location\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\drawable-xxxhdpi\\abc_ic_menu_copy_mtrl_am_alpha.png"
+    },
+    {
+        "merged": "C:\\Users\\USER\\Desktop\\FMAT 8\\Computo Movil\\nuevo\\Location\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi-v4\\abc_scrubber_control_to_pressed_mtrl_000.png",
+        "source": "C:\\Users\\USER\\Desktop\\FMAT 8\\Computo Movil\\nuevo\\Location\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\drawable-xxxhdpi\\abc_scrubber_control_to_pressed_mtrl_000.png"
     },
     {
         "merged": "C:\\Users\\Kev'\\AndroidProjects\\Location\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi-v4\\abc_btn_switch_to_on_mtrl_00012.9.png",
@@ -16,12 +16,12 @@
         "source": "C:\\Users\\USER\\Desktop\\FMAT 8\\Computo Movil\\nuevo\\Location\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\drawable-xxxhdpi\\abc_ic_ab_back_mtrl_am_alpha.png"
     },
     {
-        "merged": "C:\\Users\\Kev'\\AndroidProjects\\Location\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi-v4\\abc_tab_indicator_mtrl_alpha.9.png",
-        "source": "C:\\Users\\Kev'\\AndroidProjects\\Location\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\drawable-xxxhdpi\\abc_tab_indicator_mtrl_alpha.9.png"
-    },
-    {
         "merged": "C:\\Users\\USER\\Desktop\\FMAT 8\\Computo Movil\\nuevo\\Location\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi-v4\\abc_spinner_mtrl_am_alpha.9.png",
         "source": "C:\\Users\\USER\\Desktop\\FMAT 8\\Computo Movil\\nuevo\\Location\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\drawable-xxxhdpi\\abc_spinner_mtrl_am_alpha.9.png"
+    },
+    {
+        "merged": "C:\\Users\\Kev'\\AndroidProjects\\Location\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi-v4\\abc_tab_indicator_mtrl_alpha.9.png",
+        "source": "C:\\Users\\Kev'\\AndroidProjects\\Location\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\drawable-xxxhdpi\\abc_tab_indicator_mtrl_alpha.9.png"
     },
     {
         "merged": "C:\\Users\\Kev'\\AndroidProjects\\Location\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi-v4\\abc_btn_radio_to_on_mtrl_015.png",

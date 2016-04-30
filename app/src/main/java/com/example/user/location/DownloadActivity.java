@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -27,6 +28,7 @@ public class DownloadActivity extends AppCompatActivity {
     public static final String TAG = "NfcDemo";
     private NfcAdapter adapter;
     private ListView listView;
+    private FetchDataTask fetchDataTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +51,8 @@ public class DownloadActivity extends AppCompatActivity {
             Toast.makeText(this,"No soportas NFC NOOOOB", Toast.LENGTH_LONG).show();
         }
 
-        //handleIntent(getIntent());
-
-        FetchDataTask fetchDataTask = new FetchDataTask(arrayAdapter);
-        fetchDataTask.execute("Hola");
+        fetchDataTask = new FetchDataTask(arrayAdapter);
+        handleIntent(getIntent());
 
 
     }
@@ -91,6 +91,10 @@ public class DownloadActivity extends AppCompatActivity {
     }
 
     private void handleIntent(Intent intent) {
+        if(!InPlace()){
+            finish();
+        }
+
         String action = intent.getAction();
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
 
@@ -99,7 +103,7 @@ public class DownloadActivity extends AppCompatActivity {
 
                 Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                 new NdefReaderTask().execute(tag);
-
+                fetchDataTask.execute("Hola");
             } else {
                 Log.d(TAG, "Wrong mime type: " + type);
             }
@@ -113,10 +117,16 @@ public class DownloadActivity extends AppCompatActivity {
             for (String tech : techList) {
                 if (searchedTech.equals(tech)) {
                     new NdefReaderTask().execute(tag);
+                    fetchDataTask.execute("Hola");
                     break;
                 }
             }
         }
+    }
+
+    private boolean InPlace(){
+        SharedPreferences pref = getSharedPreferences("app", MODE_PRIVATE);
+        return pref.getBoolean("Location", false) && pref.getBoolean("Beacon", false);
     }
 
 
